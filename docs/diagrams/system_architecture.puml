@@ -1,0 +1,33 @@
+@startuml
+
+actor User
+
+rectangle "Next.js Frontend" {
+    component "Book Pages"
+    component "REST Fetch"
+    component "GraphQL Fetch"
+}
+
+rectangle "Express.js Backend" {
+
+    component "REST API Routes"
+    component "GraphQL API"
+    component "JWT Authentication"
+
+}
+
+database "MySQL Database" {
+    component "users"
+    component "books"
+    component "borrow_records"
+}
+
+User --> "Next.js Frontend"
+
+"Next.js Frontend" --> "REST API Routes"
+"Next.js Frontend" --> "GraphQL API"
+
+"REST API Routes" --> "MySQL Database"
+"GraphQL API" --> "MySQL Database"
+
+@enduml

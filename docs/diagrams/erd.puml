@@ -1,0 +1,35 @@
+@startuml
+
+entity users {
+    * id : INT <<PK>>
+    --
+    username : VARCHAR
+    email : VARCHAR
+    password : VARCHAR
+    role : VARCHAR
+}
+
+entity books {
+    * id : INT <<PK>>
+    --
+    title : VARCHAR
+    author : VARCHAR
+    category : VARCHAR
+    published_year : INT
+    available : BOOLEAN
+}
+
+entity borrow_records {
+    * id : INT <<PK>>
+    --
+    user_id : INT <<FK>>
+    book_id : INT <<FK>>
+    borrow_date : DATE
+    return_date : DATE
+    status : VARCHAR
+}
+
+users ||--o{ borrow_records
+books ||--o{ borrow_records
+
+@enduml

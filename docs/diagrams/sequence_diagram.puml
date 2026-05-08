@@ -1,0 +1,38 @@
+@startuml
+
+actor User
+
+participant "Next.js Frontend" as Frontend
+participant "REST API" as REST
+participant "GraphQL API" as GraphQL
+database "MySQL Database" as DB
+
+== REST Flow ==
+
+User -> Frontend : Open Books Page
+
+Frontend -> REST : GET /api/books
+
+REST -> DB : SELECT * FROM books
+
+DB --> REST : Books Data
+
+REST --> Frontend : JSON Response
+
+Frontend --> User : Display Books
+
+== GraphQL Flow ==
+
+User -> Frontend : Open GraphQL Demo
+
+Frontend -> GraphQL : Query books { title author }
+
+GraphQL -> DB : SELECT title, author FROM books
+
+DB --> GraphQL : Filtered Data
+
+GraphQL --> Frontend : GraphQL Response
+
+Frontend --> User : Display Books
+
+@enduml
