@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>REST API Tester</title>
+    <style>
+        body { font-family: sans-serif; padding: 20px; }
+        .form-group { margin-bottom: 10px; }
+        #response { background: #f4f4f4; padding: 10px; margin-top: 20px; white-space: pre-wrap; }
+    </style>
+</head>
+<body>
+    <h2>Library System - API Test Panel</h2>
+    
+    <div class="form-group">
+        <button onclick="fetchAllBooks()">Get All Books (GET)</button>
+        <button onclick="updateBook()">Update Book (PUT)</button>
+        <button onclick="deleteBook()">Delete Book (DELETE)</button>
+    </div>
+
+    <hr>
+
+    <div class="form-group">
+        <input type="text" id="title" placeholder="Book Title">
+        <input type="text" id="author" placeholder="Author">
+        <button onclick="createBook()">Add Book (POST)</button>
+    </div>
+
+    <div id="response">Response will appear here...</div>
+
+    <script>
+        const API_URL = "http://localhost:5000/api/books";
+
+        async function fetchAllBooks() {
+            const res = await fetch(API_URL);
+            const data = await res.json();
+            document.getElementById('response').innerText = JSON.stringify(data, null, 2);
+        }
+
+        async function createBook() {
+            const book = {
+                title: document.getElementById('title').value,
+                author: document.getElementById('author').value,
+                category: "Testing",
+                published_year: 2026,
+                available: true
+            };
+
+            const res = await fetch(API_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(book)
+            });
+            const data = await res.json();
+            document.getElementById('response').innerText = JSON.stringify(data, null, 2);
+            fetchAllBooks();
+        }
+
+        async function updateBook() {
+            const id = prompt("Nhập ID sách muốn sửa:");
+            const res = await fetch(`${API_URL}/${id}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ title: "Tên sách đã đổi" })
+            });
+            const data = await res.json();
+            alert(data.message);
+            fetchAllBooks();
+        }
+
+        async function deleteBook() {
+            const id = prompt("Nhập ID sách muốn xóa:");
+            const res = await fetch(`${API_URL}/${id}`, {
+                method: 'DELETE'
+            });
+            const data = await res.json();
+            alert(data.message);
+            fetchAllBooks();
+        }
+    </script>
+</body>
+</html>
