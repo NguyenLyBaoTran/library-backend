@@ -6,7 +6,6 @@ const { expressMiddleware } = require("@apollo/server/express4");
 const { json } = require("body-parser");
 const sequelize = require("./config/database");
 
-// Import routes and graphql files
 const bookRoutes = require("./routes/bookRoutes");
 const typeDefs = require("./graphql/schema");
 const resolvers = require("./graphql/resolvers");
