@@ -35,7 +35,7 @@ async function startServer() {
   try {
     await sequelize.authenticate();
     await sequelize.sync();
-    app.listen(PORT, () => {
+    app.listen(PORT, '0.0.0.0', () => {
       console.log(`Server is running on port ${PORT}`);
       console.log(`GraphQL Endpoint: http://localhost:${PORT}/graphql`);
     });
