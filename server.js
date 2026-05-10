@@ -31,6 +31,7 @@ async function startServer() {
   app.use(
     "/graphql",
     // Ta truyền middleware json trực tiếp vào đây để ép Express 5 xử lý body cho Apollo
+    express.json(), 
     expressMiddleware(server, {
       context: async ({ req }) => authMiddleware(req),
     })
