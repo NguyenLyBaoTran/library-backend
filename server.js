@@ -10,6 +10,7 @@ const typeDefs = require("./graphql/schema");
 const resolvers = require("./graphql/resolvers");
 const authMiddleware = require("./middleware/authMiddleware");
 
+const Book = require("./models/Book");
 const User = require("./models/User");
 const BorrowRecord = require("./models/BorrowRecord");
 
