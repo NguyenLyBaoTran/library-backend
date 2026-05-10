@@ -3,7 +3,6 @@ const express = require("express");
 const cors = require("cors");
 const { ApolloServer } = require("@apollo/server");
 const { expressMiddleware } = require("@apollo/server/express4");
-const { json } = require("body-parser");
 const sequelize = require("./config/database");
 
 const bookRoutes = require("./routes/bookRoutes");
@@ -26,8 +25,6 @@ async function startServer() {
   // GraphQL Endpoint with JWT Context (Day 3)
   app.use(
     "/graphql",
-    cors(),
-    json(),
     expressMiddleware(server, {
       context: async ({ req }) => authMiddleware(req),
     })
