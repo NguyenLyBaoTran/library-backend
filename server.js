@@ -24,8 +24,6 @@ async function startServer() {
 
   app.use(
     "/graphql",
-    cors(),
-    json(),
     expressMiddleware(server, {
       context: async ({ req }) => authMiddleware(req),
     })
