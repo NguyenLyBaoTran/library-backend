@@ -33,7 +33,7 @@ async function startServer() {
     // Ta truyền middleware json trực tiếp vào đây để ép Express 5 xử lý body cho Apollo
     express.json(), 
     expressMiddleware(server, {
-      context: async ({ req }) => authMiddleware(req),
+      context: async ({ req }) => authmiddleware(req),
     })
   );
 
