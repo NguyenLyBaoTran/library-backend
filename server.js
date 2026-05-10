@@ -3,14 +3,13 @@ const express = require("express");
 const cors = require("cors");
 const { ApolloServer } = require("@apollo/server");
 const { expressMiddleware } = require("@apollo/server/express4");
+const { json } = require("body-parser");
 const sequelize = require("./config/database");
 
 const bookRoutes = require("./routes/bookRoutes");
 const typeDefs = require("./graphql/schema");
 const resolvers = require("./graphql/resolvers");
-const authMiddleware = require("./middleware/authmiddleware");
-
-// Giữ nguyên các phần require ở trên đầu...
+const authMiddleware = require("./middleware/authMiddleware");
 
 async function startServer() {
   const app = express();
@@ -18,22 +17,19 @@ async function startServer() {
 
   await server.start();
 
-  // 1. Cấu hình Middleware toàn cục
   app.use(cors());
-  
-  // Express 5 đôi khi cần parser mạnh hơn ở mức toàn cục
   app.use(express.json());
-  app.use(express.urlencoded({ extended: true }));
 
+  // REST API Routes (Day 2)
   app.use("/api/books", bookRoutes);
 
-  // 2. Cấu hình riêng cho GraphQL (Sửa đoạn này)
+  // GraphQL Endpoint with JWT Context (Day 3)
   app.use(
     "/graphql",
-    // Ta truyền middleware json trực tiếp vào đây để ép Express 5 xử lý body cho Apollo
-    express.json(), 
+    cors(),
+    json(),
     expressMiddleware(server, {
-      context: async ({ req }) => authmiddleware(req),
+      context: async ({ req }) => authMiddleware(req),
     })
   );
 
@@ -41,9 +37,9 @@ async function startServer() {
   try {
     await sequelize.authenticate();
     await sequelize.sync();
-    app.listen(PORT, '0.0.0.0', () => {
+    app.listen(PORT, () => {
       console.log(`Server is running on port ${PORT}`);
-      console.log(`GraphQL Endpoint: /graphql`);
+      console.log(`GraphQL Endpoint: http://localhost:${PORT}/graphql`);
     });
   } catch (error) {
     console.error("Unable to connect to the database:", error);
