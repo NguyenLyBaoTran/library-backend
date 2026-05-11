@@ -25,7 +25,6 @@ async function startServer() {
 
   app.use("/api/books", bookRoutes);
 
-  // GraphQL Endpoint with JWT Context (Day 3)
   app.use(
     "/graphql",
     expressMiddleware(server, {
