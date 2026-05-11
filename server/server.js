@@ -16,7 +16,7 @@ const BorrowRecord = require("./models/BorrowRecord");
 
 async function startServer() {
   const app = express();
-  const server = new ApolloServer({ typeDefs, resolvers });
+  const server = new ApolloServer({ typeDefs, resolvers, introspection: true,});
 
   await server.start();
 
@@ -36,7 +36,7 @@ async function startServer() {
   try {
 
     await sequelize.authenticate();
-    
+
     Book.hasMany(BorrowRecord, { foreignKey: 'book_id', as: 'borrow_records' });
     BorrowRecord.belongsTo(Book, { foreignKey: 'book_id' });
 
