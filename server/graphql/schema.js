@@ -7,6 +7,7 @@ const typeDefs = gql`
     author: String!
     category: String
     year: Int
+    isAvailable: Boolean
   }
 
   type User {
@@ -16,8 +17,17 @@ const typeDefs = gql`
     role: String
   }
 
+  type BorrowRecord {
+    id: ID!
+    user_id: Int!
+    book_id: Int!
+    borrow_date: String
+    status: String
+  }
+
   type Query {
     getAllBooks: [Book]
+    getBookById(id: ID!): Book
   }
 
   type Mutation {
@@ -25,6 +35,8 @@ const typeDefs = gql`
     
     login(username: String!, password: String!): String
     addBook(title: String!, author: String!, category: String, year: Int): Book
+    borrowBook(book_id: ID!): BorrowRecord
+    returnBook(record_id: ID!): BorrowRecord
   }
 `;
 

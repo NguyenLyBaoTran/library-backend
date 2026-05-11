@@ -2,14 +2,27 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs"); 
 const Book = require("../models/Book");
 const User = require("../models/User");
+const BorrowRecord = require("../models/BorrowRecord");
 
 const resolvers = {
   Query: {
     getAllBooks: async (_, __, context) => {
-      if (!context.isAuth) {
-        throw new Error("Unauthorized: Please login to access this data");
-      }
-      return await Book.findAll();
+      if (!context.isAuth) throw new Error("Unauthorized: Please login");
+      return await Book.findAll({ where: { isAvailable: true } });
+    },
+
+    getBookById: async (_, { id }, context) => {
+      if (!context.isAuth) throw new Error("Unauthorized");
+      const book = await Book.findByPk(id);
+      if (!book) throw new Error("Book not found");
+      return book;
+    },
+
+    getBookById: async (_, { id }, context) => {
+      if (!context.isAuth) throw new Error("Unauthorized");
+      const book = await Book.findByPk(id);
+      if (!book) throw new Error("Book not found");
+      return book;
     },
   },
   Mutation: {
@@ -38,7 +51,7 @@ const resolvers = {
           username, 
           email, 
           password: hashedPassword,
-          role: "user" // Mặc định đăng ký là user thường
+          role: "user" 
         });
 
         return "User registered successfully";
@@ -54,7 +67,6 @@ const resolvers = {
       const isMatch = await bcrypt.compare(password, user.password);
       if (!isMatch) throw new Error("Invalid credentials");
 
-      // Trân để ý: role được đưa vào token ở đây nè
       return jwt.sign(
         { id: user.id, role: user.role },
         process.env.JWT_SECRET || "secret",
@@ -72,6 +84,49 @@ const resolvers = {
       }
 
       return await Book.create(args);
+    },
+
+    borrowBook: async (_, { book_id }, context) => {
+      if (!context.isAuth) {
+        throw new Error("You must login to borrow books");
+      }
+
+      const book = await Book.findByPk(book_id);
+      if (!book) throw new Error("Book does not exist");
+      if (!book.isAvailable) throw new Error("This book is already borrowed");
+
+      book.isAvailable = false;
+      await book.save();
+
+      const record = await BorrowRecord.create({
+        user_id: context.user.id,
+        book_id: book_id,
+        status: "borrowed"
+        
+      });
+
+      return record;
+    },
+
+    returnBook: async (_, { record_id }, context) => {
+      if (!context.isAuth || context.user.role !== "admin") {
+        throw new Error("Forbidden: Only Admin can confirm book returns");
+      }
+
+      const record = await BorrowRecord.findByPk(record_id);
+      if (!record) throw new Error("Borrow record not found");
+      if (record.status === "returned") throw new Error("Book already returned");
+
+      const book = await Book.findByPk(record.book_id);
+      if (book) {
+        book.isAvailable = true;
+        await book.save();
+      }
+
+      record.status = "returned";
+      await record.save();
+
+      return record;
     },
   },
 };

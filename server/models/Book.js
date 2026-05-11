@@ -21,7 +21,7 @@ const Book = sequelize.define("Book", {
     type: DataTypes.INTEGER,
     validate: { isInt: true }
   },
-  available: {
+  isAvailable: {
     type: DataTypes.BOOLEAN,
     defaultValue: true
   }
