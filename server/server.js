@@ -25,7 +25,6 @@ async function startServer() {
 
   app.use("/api/books", bookRoutes);
 
-  // GraphQL Endpoint with JWT Context (Day 3)
   app.use(
     "/graphql",
     expressMiddleware(server, {
@@ -35,7 +34,15 @@ async function startServer() {
 
   const PORT = process.env.PORT || 5000;
   try {
+
     await sequelize.authenticate();
+    
+    Book.hasMany(BorrowRecord, { foreignKey: 'book_id', as: 'borrow_records' });
+    BorrowRecord.belongsTo(Book, { foreignKey: 'book_id' });
+
+    User.hasMany(BorrowRecord, { foreignKey: 'user_id' });
+    BorrowRecord.belongsTo(User, { foreignKey: 'user_id' });
+
     await sequelize.sync({ alter: true });
     app.listen(PORT, () => {
       console.log(`Server is running on port ${PORT}`);

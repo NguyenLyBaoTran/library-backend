@@ -1,4 +1,5 @@
 const Book = require("../models/Book");
+const BorrowRecord = require("../models/BorrowRecord");
 
 exports.getAllBooks = async (req, res) => {
   try {
@@ -9,10 +10,28 @@ exports.getAllBooks = async (req, res) => {
   }
 };
 
+exports.getBookDetail = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const book = await Book.findByPk(id, {
+      include: [{ model: BorrowRecord, as: 'borrow_records' }] 
+    });
+    if (!book) return res.status(404).json({ message: "Book not found" });
+    res.status(200).json(book);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 exports.createBook = async (req, res) => {
   try {
-    const newBook = await Book.create(req.body);
-    res.status(201).json(newBook);
+    if (Array.isArray(req.body)) {
+      const newBooks = await Book.bulkCreate(req.body);
+      return res.status(201).json(newBooks);
+    } else {
+      const newBook = await Book.create(req.body);
+      return res.status(201).json(newBook);
+    }
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
