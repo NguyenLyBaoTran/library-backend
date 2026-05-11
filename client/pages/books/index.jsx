@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import BookCard from '../../components/BookCard';
+import Navbar from "../../components/Navbar";
 
 export default function BookListPage() {
   const [books, setBooks] = useState([]);
@@ -33,21 +34,7 @@ export default function BookListPage() {
 
   return (
     <div className="min-h-screen bg-[#FDFDF5]">
-      <header className="py-8 bg-white/60 backdrop-blur-xl border-b border-[#E2E9D1] sticky top-0 z-50">
-        <div className="max-w-6xl mx-auto px-8 flex justify-between items-center">
-          <div className="flex items-center space-x-4">
-            <div className="w-10 h-10 bg-[#87A96B] rounded-xl flex items-center justify-center text-white text-base font-bold shadow-lg shadow-[#87A96B]/20">
-              L
-            </div>
-            <span className="text-lg font-serif font-black tracking-widest text-gray-800 uppercase">Archive</span>
-          </div>
-          
-          <nav className="flex items-center space-x-8 text-xs font-black uppercase tracking-[0.2em] text-gray-400">
-            <span className="text-[#87A96B] cursor-pointer">Collection</span>
-            <span className="hover:text-gray-800 cursor-pointer transition-colors">Stats</span>
-          </nav>
-        </div>
-      </header>
+      <Navbar />
 
       <main className="max-w-6xl mx-auto px-8 py-20">
         <div className="mb-16 border-b border-[#E2E9D1] pb-10">
