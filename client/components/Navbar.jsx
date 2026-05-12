@@ -113,6 +113,23 @@ export default function Navbar() {
               >
                 Books
               </Link>
+              
+              {user.username === "admin_library" && (
+                <>
+                  <Link
+                    href="/admin/books"
+                    className={navLinkClass("/admin/books")}
+                  >
+                    Manage Books
+                  </Link>
+                  <Link
+                    href="/admin/borrow-records"
+                    className={navLinkClass("/admin/borrow-records")}
+                  >
+                    Records
+                  </Link>
+                </>
+              )}
 
               <Link
                 href="/graphql-demo"
@@ -209,6 +226,25 @@ export default function Navbar() {
                 >
                   Books
                 </Link>
+
+                {user.username === "admin_library" && (
+                  <>
+                    <Link
+                      href="/admin/books"
+                      onClick={() => setOpen(false)}
+                      className={mobileNavClass("/admin/books")}
+                    >
+                      Manage Books
+                    </Link>
+                    <Link
+                      href="/admin/borrow-records"
+                      onClick={() => setOpen(false)}
+                      className={mobileNavClass("/admin/borrow-records")}
+                    >
+                      Records
+                    </Link>
+                  </>
+                )}
 
                 <Link
                   href="/graphql-demo"
