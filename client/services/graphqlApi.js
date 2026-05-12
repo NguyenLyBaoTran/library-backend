@@ -21,11 +21,7 @@ export async function loginUser(
   return result.data.login;
 }
 
-export async function registerUser(
-  username,
-  email,
-  password
-) {
+export async function registerUser(username, email, password) {
   const mutation = gql`
     mutation {
       register(
