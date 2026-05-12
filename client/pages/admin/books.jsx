@@ -17,11 +17,26 @@ export default function AdminBooksPage() {
 
   const fetchBooks = async () => {
     try {
-      const res = await fetch(API_URL);
-      const data = await res.json();
-      const normalizedData = data.map(book => ({
+      const token = localStorage.getItem("token");
+      const headers = {
+        "Authorization": token ? `Bearer ${token}` : "",
+        "Content-Type": "application/json"
+      };
+
+      const response = await fetch(`https://library-backend-production-244f.up.railway.app/graphql`, {
+        method: "POST",
+        headers,
+        body: JSON.stringify({
+          query: `query { getAllBooks { id title author category published_year isAvailable } }`
+        })
+      });
+
+      const result = await response.json();
+      const allBooks = result.data?.getAllBooks || [];
+      
+      const normalizedData = allBooks.map(book => ({
         ...book,
-        available: book.available ?? book.isAvailable ?? true
+        available: book.isAvailable ?? true
       }));
       setBooks(normalizedData);
     } catch (err) {
@@ -38,13 +53,17 @@ export default function AdminBooksPage() {
   const handleCreate = async (e) => {
     e.preventDefault();
     try {
+      const token = localStorage.getItem("token");
       await fetch(API_URL, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { 
+          "Content-Type": "application/json",
+          "Authorization": token ? `Bearer ${token}` : "" 
+        },
         body: JSON.stringify({
           ...form,
           published_year: Number(form.published_year),
-          available: true,
+          isAvailable: true,
         }),
       });
       setForm({ title: "", author: "", category: "", published_year: "" });
@@ -57,7 +76,11 @@ export default function AdminBooksPage() {
   const handleDelete = async (id) => {
     if (!confirm("Delete this book?")) return;
     try {
-      await fetch(`${API_URL}/${id}`, { method: "DELETE" });
+      const token = localStorage.getItem("token");
+      await fetch(`${API_URL}/${id}`, { 
+        method: "DELETE",
+        headers: { "Authorization": token ? `Bearer ${token}` : "" }
+      });
       fetchBooks();
     } catch (err) {
       console.log(err);
@@ -90,7 +113,6 @@ export default function AdminBooksPage() {
           category: editingBook.category,
           published_year: Number(editingBook.published_year),
           isAvailable: editingBook.available,
-          available: editingBook.available,
         }),
       });
 

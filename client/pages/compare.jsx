@@ -56,6 +56,7 @@ export default function ComparePage() {
                 title
                 author
                 category
+                published_year
               }
             }
           `,

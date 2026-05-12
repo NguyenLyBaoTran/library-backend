@@ -49,7 +49,7 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen bg-[#F8FAF5]">
       <Navbar />
-      <div className="flex items-center justify-center px-6 py-20">
+      <div className="flex items-center justify-center px-6 py-4">
         <form
           onSubmit={handleLogin}
           className="bg-white border border-[#E2E9D1] rounded-3xl shadow-sm w-full max-w-md p-10"
@@ -98,16 +98,6 @@ export default function LoginPage() {
           >
             {loading ? "Logging In..." : "Login"}
           </button>
-
-          <p className="text-center text-sm text-gray-500 mt-8">
-            Don't have an account?{" "}
-            <Link
-              href="/register"
-              className="text-[#87A96B] font-semibold hover:underline"
-            >
-              Register
-            </Link>
-          </p>
         </form>
       </div>
     </div>
