@@ -21,7 +21,6 @@ const typeDefs = gql`
   }
 
   type Mutation {
-    # Phải có dòng này thì server mới hết báo lỗi "Mutation.register defined in resolvers, but not in schema"
     register(username: String!, email: String!, password: String!): String
     
     login(username: String!, password: String!): String

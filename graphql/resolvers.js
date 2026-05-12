@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-const bcrypt = require("bcryptjs"); // Nhớ npm install bcryptjs
+const bcrypt = require("bcryptjs"); 
 const Book = require("../models/Book");
 const User = require("../models/User");
 
