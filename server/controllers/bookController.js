@@ -3,7 +3,7 @@ const BorrowRecord = require("../models/BorrowRecord");
 
 exports.getAllBooks = async (req, res) => {
   try {
-    const books = await Book.findAll();
+    const books = await Book.findAll({ where: { isAvailable: true }});
     res.status(200).json(books);
   } catch (error) {
     res.status(500).json({ error: error.message });
