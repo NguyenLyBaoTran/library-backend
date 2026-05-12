@@ -8,7 +8,11 @@ const resolvers = {
   Query: {
     getAllBooks: async (_, __, context) => {
       if (!context.isAuth) throw new Error("Unauthorized: Please login");
-      return await Book.findAll({ where: { isAvailable: true } });
+      if (context.user && context.user.role === 'admin') {
+        return await Book.findAll(); 
+      } else {
+        return await Book.findAll({ where: { isAvailable: true } });
+      }
     },
 
     getBookById: async (_, { id }, context) => {

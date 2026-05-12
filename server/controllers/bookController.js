@@ -3,6 +3,10 @@ const BorrowRecord = require("../models/BorrowRecord");
 
 exports.getAllBooks = async (req, res) => {
   try {
+    if (req.user && req.user.role === 'admin') {
+      const books = await Book.findAll();
+      return res.status(200).json(books);
+    }
     const books = await Book.findAll({ where: { isAvailable: true }});
     res.status(200).json(books);
   } catch (error) {
