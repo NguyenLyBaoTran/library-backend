@@ -9,14 +9,19 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@apollo/client": "^4.1.9",
+    "graphql": "^16.14.0",
+    "jwt-decode": "^4.0.0",
     "next": "16.2.6",
     "react": "19.2.4",
     "react-dom": "19.2.4"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
+    "autoprefixer": "^10.5.0",
     "eslint": "^9",
     "eslint-config-next": "16.2.6",
-    "tailwindcss": "^4"
+    "postcss": "^8.5.14",
+    "tailwindcss": "^4.3.0"
   }
 }
